@@ -14,7 +14,7 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      # Step 1: Checkout your repo
+      # Step 1: Checkout repository
       - name: Checkout repository
         uses: actions/checkout@v3
 
@@ -30,6 +30,18 @@ jobs:
           python -m pip install --upgrade pip
           pip install selenium pytest
 
-      # Step 4: Run your tests
+      # Step 4: Install Google Chrome
+      - name: Install Google Chrome
+        run: |
+          wget https://dl.google.com/linux/direct/google-chrome-stable_current_amd64.deb
+          sudo apt install ./google-chrome-stable_current_amd64.deb -y
+
+      # Step 5: Install ChromeDriver
+      - name: Install ChromeDriver
+        uses: nanasess/setup-chromedriver@v1
+        with:
+          chromedriver-version: 'latest'
+
+      # Step 6: Run Selenium/Pytest tests
       - name: Run QA automation tests
         run: pytest tests/ --maxfail=1 --disable-warnings -q
